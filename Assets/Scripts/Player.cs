@@ -10,22 +10,31 @@ public class Player : MonoBehaviour
     /**
         player properties 
 */
-    public float moveSpeed;
-    public Rigidbody2D rb;
 
-    /**
+    private Rigidbody2D rb;
+    private Animator anim;
+   [Header("Move info")]
+    public float moveSpeed;
+
+    /******************************************************************
         JUMP Stuffs START
-    */
+    *******************************************************************/
 
     public float jumpForce = 2;
     private bool canDoubleJump = false;
 
+    /*****************************************************************/
+    [Header("Collision Info")]
     public LayerMask whatIsGround; // Untuk ignore colliders when Beam start shooting ( Raycast Yak) jadi ini nanti di isi untuk Layer yang akan di raycast
     public float groundCheckDistance;
     private bool isGrounded = false;
-    /** 
+    /***************************************************************/
+
+    /******************************************************************
         JUMP Stuffs END
-    */
+    *******************************************************************/
+
+
     private float movingInput;
 
     /**
@@ -33,7 +42,8 @@ public class Player : MonoBehaviour
 */
     void Start()
     {
-        Debug.Log("Start Was Called");
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -43,10 +53,18 @@ public class Player : MonoBehaviour
 
         InputChecks();
 
+        AnimationControllers();
         Move();
 
     }
 
+    void AnimationControllers()
+    {
+        bool isMoving = rb.velocity.x != 0; // Check if the Player moving or not
+        anim.SetBool("isMoving", isMoving);
+        anim.SetFloat("yVelocity", rb.velocity.y);
+        anim.SetBool("isGrounded",isGrounded);
+    }
     void InputChecks()
     {
         movingInput = Input.GetAxisRaw("Horizontal");
