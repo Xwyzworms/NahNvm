@@ -11,7 +11,8 @@ public class Trap : MonoBehaviour {
         //Constancet
         if(collision.GetComponent<Player>() != null) 
         {
-            Debug.Log("Assert dude");
+            Player player = collision.GetComponent<Player>();
+            player.Knockback();
         }
     }   
 }

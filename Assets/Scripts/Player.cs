@@ -8,7 +8,22 @@ public class Player : MonoBehaviour
 
     //TODO CREATE ANOOOOOOOO, MAke sure the SPRITE IS 16pixel per unity unit
     /**
-        player properties 
+        player properties
+
+        MECHANICS OF THE PLAYER :
+
+        Able to Do 
+        - Jump ( Done )
+            - Normal Jump
+        - Wall Sliding ( Done )
+            - Player able to Wallsliding if touching wall, and when pressed vertical key,it move faster
+        - Wall JUmp ( Done)
+        - Double Jump ( Done )
+        - Buffer Jump ( Done )
+            - player able to jump  one more time if they pressing jump button but not touching the ground for some quite amount of time
+        - Cayote Jump ()
+            - Player able to do jump at the edge of a ground sorting layer objects 
+
 */
 
     private Rigidbody2D rb;
@@ -26,12 +41,34 @@ public class Player : MonoBehaviour
         JUMP Stuffs START
     *******************************************************************/
 
-    public float jumpForce = 2;
+    public float jumpForce = 4;
     public Vector2 wallJumpDirection;
     private bool canDoubleJump = false;
-
+    private float defaultJumpForce;
+    public float doubleJumpForce ;
     private bool canMove = false;
 
+        /******************************************************************
+            BUFFER JUMP Start
+        *******************************************************************/
+            [Header("Buffer Jump Info")]
+            private float bufferJumpTimer = 0;
+            [SerializeField]float bufferJumpCooldown = 0.15f;
+        /******************************************************************
+            BUFFER JUMP End
+        *******************************************************************/
+    
+        /******************************************************************
+            Cayote JUMP Start
+        *******************************************************************/
+            [Header("Cayote Jump Info")]
+            private float cayoteJumpTimer = 0;
+            [SerializeField]float cayoteJumpCooldown = 0.15f;
+            private bool canHaveCayoteJump = false;
+        /******************************************************************
+            Cayote JUMP End
+        *******************************************************************/
+    
     /******************************************************************
         JUMP Stuffs END
     *******************************************************************/
@@ -50,6 +87,18 @@ public class Player : MonoBehaviour
     private bool isWallSliding = false;
     private bool canWallSliding = false;
 
+
+        /******************************************************************
+            Knocked Start
+        *******************************************************************/
+            [Header("Knocked Info")]
+            [SerializeField] private Vector2 knockbackDirection;
+            [SerializeField] private bool  isKnocked; 
+            [SerializeField] private float knockbackTimer;
+        /******************************************************************
+            Knocked End
+        *******************************************************************/
+
     /***************************************************************/
     /******************************************************************
         Collision Stuffs END
@@ -64,29 +113,63 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        defaultJumpForce = jumpForce;
     }
 
     void Update()
     {
         // For visualization of Raycast use the gizmos, DRAW WITH YOURSELF !
         AnimationControllers();
+        if(isKnocked)
+        {
+            return ;
+        }
         CollisionCheck();
         FlipController();
         InputChecks();
 
+        bufferJumpTimer -= Time.deltaTime;
+        cayoteJumpTimer -= Time.deltaTime;
         if (isGrounded)
         {
             canDoubleJump = true;
             canMove = true;
+            if(bufferJumpTimer > 0) 
+            {
+                bufferJumpTimer = -1;
+                Jump();
+            }
+            canHaveCayoteJump = true;
+        }
+        else 
+        {
+            // We need boolean to making sure, we are only take one time cayote jump
+            if(canHaveCayoteJump) 
+            {
+                canHaveCayoteJump = false;
+                cayoteJumpTimer = cayoteJumpCooldown;
+            }
         }
         if(canWallSliding) 
         {
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.1f);
         }
-
             Move();
+    }
 
+    public void  Knockback() 
+    {
+
+        isKnocked = true;
+        rb.velocity = new Vector2(knockbackDirection.x, knockbackDirection.y);
+
+        Invoke("CancelKnockback", knockbackTimer);
+    }
+
+    private void CancelKnockback() 
+    {
+        isKnocked = false;
     }
     private void AnimationControllers()
     {
@@ -96,6 +179,7 @@ public class Player : MonoBehaviour
         anim.SetBool("isGrounded",isGrounded);
         anim.SetBool("isWallSliding", isWallSliding);
         anim.SetBool("isWallDetected", isWallDetected);
+        anim.SetBool("isKnocked", isKnocked);
 
     }
     private void InputChecks()
@@ -147,20 +231,28 @@ public class Player : MonoBehaviour
     }
     private void JumpButton()
     {
+        if(!isGrounded) 
+        {
+            bufferJumpTimer = bufferJumpCooldown;
+        }
         if(isWallSliding) 
         {
             WallJump();
+            canDoubleJump = true;
         }
-        if (isGrounded)
+       else if (isGrounded || cayoteJumpTimer > 0 )
         {
             Jump();
         }
+     
         else if (canDoubleJump)
         {
+            canMove = true;
             canDoubleJump = false;
+            jumpForce = doubleJumpForce;
             Jump();
+            jumpForce = defaultJumpForce;
         }
-
         canWallSliding = false;
     }
     private void Move()
@@ -193,5 +285,4 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + wallCheckDistance * facingDirection , transform.position.y));
     }
 
-        
 }
