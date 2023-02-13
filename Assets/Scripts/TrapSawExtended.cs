@@ -16,6 +16,7 @@ public class TrapSawExtended : Trap
     {   
         anim = GetComponent<Animator>();
         isWorking = true;
+        transform.position = movePoints[0].position;
         
     }
 

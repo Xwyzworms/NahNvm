@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrapSaw : Trap
+public class TrapSaw : Trap 
 {
     // Start is called before the first frame update
     [SerializeField] Animator anim;
-    [SerializeField] Transform[] movePoints;
+    [SerializeField] Transform[] movepoints;
     [SerializeField] float speed = 5;
 
     [SerializeField] int movePointIndex;
@@ -17,7 +17,6 @@ public class TrapSaw : Trap
     void Start()
     {
         anim = GetComponent<Animator>();
-        transform.position = movePoints[0].position;
 
     }
 
@@ -30,13 +29,13 @@ public class TrapSaw : Trap
         
         if(isWorking) 
         {
-            transform.position = Vector3.MoveTowards(transform.position, movePoints[movePointIndex].position, speed* Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, movepoints[movePointIndex].position, speed* Time.deltaTime);
         }
-        if(Vector2.Distance(transform.position, movePoints[movePointIndex].position) < 0.15f) 
+        if(Vector2.Distance(transform.position, movepoints[movePointIndex].position) < 0.15f) 
         {
             Flip();
             movePointIndex++;
-            if(movePointIndex >= movePoints.Length) 
+            if(movePointIndex >= movepoints.Length) 
             {
                 movePointIndex = 0;
             }
