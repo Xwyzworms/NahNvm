@@ -95,6 +95,8 @@ public class Player : MonoBehaviour
             [SerializeField] private Vector2 knockbackDirection;
             [SerializeField] private bool  isKnocked; 
             [SerializeField] private float knockbackTimer;
+            [SerializeField] private float knockbackProtectionTime ;
+            [SerializeField] private bool canBeKnocked = true;
         /******************************************************************
             Knocked End
         *******************************************************************/
@@ -158,18 +160,29 @@ public class Player : MonoBehaviour
             Move();
     }
 
-    public void  Knockback() 
+    public void Knockback(int direction) 
     {
 
+        if(!canBeKnocked) 
+        {
+            return;
+        }
+
         isKnocked = true;
-        rb.velocity = new Vector2(knockbackDirection.x, knockbackDirection.y);
+        canBeKnocked = false;
+        rb.velocity = new Vector2(knockbackDirection.x * direction, knockbackDirection.y);
 
         Invoke("CancelKnockback", knockbackTimer);
+        Invoke("AllowKnockback", knockbackProtectionTime);
     }
 
     private void CancelKnockback() 
     {
         isKnocked = false;
+    }
+    private void AllowKnockback() 
+    {
+        canBeKnocked = true;
     }
     private void AnimationControllers()
     {
