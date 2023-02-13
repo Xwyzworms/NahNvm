@@ -78,9 +78,9 @@ public class Player : MonoBehaviour
     *******************************************************************/
     [Header("Collision Detection Info")]
     /*****************************************************************/
-    public LayerMask whatIsGround; // Untuk ignore colliders when Beam start shooting ( Raycast Yak) jadi ini nanti di isi untuk Layer yang akan di raycast
-    public float groundCheckDistance;
-    public float wallCheckDistance;
+    [SerializeField] private LayerMask whatIsGround; // Untuk ignore colliders when Beam start shooting ( Raycast Yak) jadi ini nanti di isi untuk Layer yang akan di raycast
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private float wallCheckDistance;
     bool isMoving = false;
     private bool isGrounded = false;
     private bool isWallDetected = false;
@@ -101,6 +101,16 @@ public class Player : MonoBehaviour
             Knocked End
         *******************************************************************/
 
+
+        /******************************************************************
+            Enemy Collision Start
+        *******************************************************************/
+        [SerializeField] private Transform enemyCheckCollision; //ENemyCheck
+        [SerializeField] private float enemyCheckRadius;
+
+        /******************************************************************
+            Enemy Collision End
+        *******************************************************************/
     /***************************************************************/
     /******************************************************************
         Collision Stuffs END
@@ -126,9 +136,11 @@ public class Player : MonoBehaviour
         {
             return ;
         }
+
         CollisionCheck();
         FlipController();
         InputChecks();
+        checkForEnemyCollision();
 
         bufferJumpTimer -= Time.deltaTime;
         cayoteJumpTimer -= Time.deltaTime;
@@ -159,7 +171,26 @@ public class Player : MonoBehaviour
         }
             Move();
     }
+    private void checkForEnemyCollision() // CheckForEnemy 
+    {
 
+        Collider2D[] hittedColliders = Physics2D.OverlapCircleAll(enemyCheckCollision.position, enemyCheckRadius);
+
+        foreach(var enemy in hittedColliders) 
+        {
+            if(enemy.GetComponent<Enemy>() != null) 
+            {
+                // Only Damage when Falling, Y < 0
+                if(rb.velocity.y < 0)  
+                {
+                    enemy.GetComponent<Enemy>().Damage();
+                    Jump();
+                }
+            }
+
+        }
+
+    }
     public void Knockback(int direction) 
     {
 
@@ -296,6 +327,7 @@ public class Player : MonoBehaviour
         ***/
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
         Gizmos.DrawLine(transform.position, new Vector2(transform.position.x + wallCheckDistance * facingDirection , transform.position.y));
+        Gizmos.DrawWireSphere(enemyCheckCollision.position, enemyCheckRadius);
     }
 
 }
