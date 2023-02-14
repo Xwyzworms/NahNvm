@@ -79,7 +79,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.45000002
-    functionName: Damage
+    functionName: DestroyGameObject
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
