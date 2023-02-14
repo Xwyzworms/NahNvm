@@ -191,18 +191,32 @@ public class Player : MonoBehaviour
         }
 
     }
-    public void Knockback(int direction) 
+    public void Knockback(Transform damagingTransform) 
     {
 
         if(!canBeKnocked) 
         {
             return;
         }
-
+        #region Define horizontal directionn for knockback
+        int hDirection = 0;
         isKnocked = true;
         canBeKnocked = false;
-        rb.velocity = new Vector2(knockbackDirection.x * direction, knockbackDirection.y);
-
+        if(this.transform.position.x > damagingTransform.transform.position.x) 
+            {
+                hDirection = 1;
+            }
+            else if(this.transform.position.x < damagingTransform.transform.position.x) 
+            {
+                hDirection = -1;
+            }
+            else 
+            {
+                // Knock to Up
+                hDirection = 0;
+            }
+                rb.velocity = new Vector2(knockbackDirection.x * hDirection, knockbackDirection.y);
+        #endregion
         Invoke("CancelKnockback", knockbackTimer);
         Invoke("AllowKnockback", knockbackProtectionTime);
     }
