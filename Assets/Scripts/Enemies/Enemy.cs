@@ -5,20 +5,22 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] protected Animator anim;
-    [SerializeField] protected Rigidbody2D rb;
+    [SerializeField] protected float speed = 3;
+    protected Animator anim;
+    protected Rigidbody2D rb;
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected Transform wallCheck;
 
-    protected int facingDirection = 1; 
+    protected int facingDirection = 1;
+    protected bool invicible = false;
     
     
     /******************************************************************
         Collisions Stuffs START
     *******************************************************************/
         [SerializeField] protected LayerMask whatisGround;
-        [SerializeField] protected float wallCheckDistance;
-        [SerializeField] protected float groundCheckDistance;
+        [SerializeField] protected float wallCheckDistance = 0.88f;
+        [SerializeField] protected float groundCheckDistance  = 0.93f; 
         protected bool isWallDetected = false;
         protected bool isGround = false;
 
@@ -49,15 +51,20 @@ public class Enemy : MonoBehaviour
 
     public void Damage() 
     {
+        anim.SetTrigger("hittedByPlayer");
+    }
+
+    public void DestroyGameObject() 
+    {
         Destroy(gameObject);
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D collision) 
+    protected virtual void OnTriggerEnter2D(Collider2D collider) 
     {
     
-        if(collision.collider.GetComponent<Player>() != null) 
+        if(collider.GetComponent<Player>() != null) 
         {
-            Player player = collision.collider.GetComponent<Player>();
+            Player player = collider.GetComponent<Player>();
             player.Knockback(this.transform);
         }
     }
