@@ -15,9 +15,6 @@ public class Enemy_Rhino : Enemy
     private float shockTimer;
     [SerializeField] private float shockTimerCooldown;
     [SerializeField] private int distanceToPlayer;
-    [SerializeField] private LayerMask whatToIgnore;
-
-
 
 
     protected override void Start()

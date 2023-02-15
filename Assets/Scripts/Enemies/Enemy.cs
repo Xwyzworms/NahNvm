@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
         Collisions Stuffs START
     *******************************************************************/
         [SerializeField] protected LayerMask whatisGround;
+        [SerializeField] protected LayerMask whatToIgnore;
         [SerializeField] protected float wallCheckDistance = 0.88f;
         [SerializeField] protected float groundCheckDistance  = 0.93f; 
         protected bool isWallDetected = false;
