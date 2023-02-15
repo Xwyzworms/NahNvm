@@ -16,22 +16,10 @@ public class Enemy_Mushroom : Enemy
     void Update()
     {
         AnimationControllers();
-        if(animIdleTimer <= 0) 
-        {
-            rb.velocity = new Vector2(speed * facingDirection, rb.velocity.y);   
-        }
-        else 
-        {
-            rb.velocity = Vector2.zero;
-        }
-        animIdleTimer -= Time.deltaTime;
+        
+        WalkAround();
         CollisionCheck();
-
-        if(isWallDetected || !isGround) 
-        {
-            Flip();
-            animIdleTimer = animIdleCooldown;
-        }
+        
     }
 
     private void AnimationControllers() 

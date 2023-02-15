@@ -48,7 +48,24 @@ public class Enemy : MonoBehaviour
        isWallDetected = Physics2D.Raycast(wallCheck.transform.position, Vector2.right * facingDirection, wallCheckDistance, whatisGround);
 
     }
+    protected virtual void WalkAround() 
+    {
+            if (animIdleTimer <= 0)
+            {
+                rb.velocity = new Vector2(speed * facingDirection, rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity = Vector2.zero;
+            }
 
+            if (isWallDetected || !isGround)
+            {
+                Flip();
+                animIdleTimer = animIdleCooldown;
+            }
+            animIdleTimer -= Time.deltaTime;
+    }
     public void Damage() 
     {
         anim.SetTrigger("hittedByPlayer");

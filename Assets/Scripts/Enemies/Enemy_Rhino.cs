@@ -60,21 +60,7 @@ public class Enemy_Rhino : Enemy
         }
         else
         {
-            if (animIdleTimer <= 0)
-            {
-                rb.velocity = new Vector2(speed * facingDirection, rb.velocity.y);
-            }
-            else
-            {
-                rb.velocity = Vector2.zero;
-            }
-
-            if (isWallDetected || !isGround)
-            {
-                Flip();
-                animIdleTimer = animIdleCooldown;
-            }
-            animIdleTimer -= Time.deltaTime;
+            WalkAround();
         }
 
         CollisionCheck();
