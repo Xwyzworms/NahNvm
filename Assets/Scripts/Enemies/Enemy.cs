@@ -13,6 +13,8 @@ public class Enemy : MonoBehaviour
 
     protected int facingDirection = 1;
     protected bool invicible = false;
+
+    protected bool canMove = true;
     
     
     /******************************************************************
@@ -50,7 +52,7 @@ public class Enemy : MonoBehaviour
     }
     protected virtual void WalkAround() 
     {
-            if (animIdleTimer <= 0)
+            if (animIdleTimer <= 0 && canMove)
             {
                 rb.velocity = new Vector2(speed * facingDirection, rb.velocity.y);
             }
@@ -66,9 +68,13 @@ public class Enemy : MonoBehaviour
             }
             animIdleTimer -= Time.deltaTime;
     }
-    public void Damage() 
+    public virtual void Damage() 
     {
-        anim.SetTrigger("hittedByPlayer");
+        if(!invicible) 
+        {
+            canMove = false;
+            anim.SetTrigger("hittedByPlayer");
+        }
     }
 
     public void DestroyGameObject() 
