@@ -42,8 +42,6 @@ public class Enemy_BlueBirdExtended : Enemy_BlueBird
         if(canFly)
         {
             Vector2 distance = this.transform.position - waypoints[waypointIndx].position;
-            Debug.Log(distance.x);
-            Debug.Log(distance.y);
             if( Vector2.Distance(transform.position,waypoints[waypointIndx].position) < 2.5f) 
             {
 

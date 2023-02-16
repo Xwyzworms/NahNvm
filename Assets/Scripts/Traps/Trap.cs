@@ -12,8 +12,6 @@ public class Trap : MonoBehaviour {
         if(collision.GetComponent<Player>() != null) 
         {
             Player player = collision.GetComponent<Player>();
-            // If player disebelah kanan, knockback ke kanan,
-            // else  kalau disebelah kiri
                 player.Knockback(this.transform);
         }
     }   
