@@ -4,7 +4,43 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
+    /*******
+
+        I WROTE TOO MANY COMMENTS, 
+        SO ENJOY IT
+
+    *******/
+    
+    /******************************************************************
+        PROPERTIES START #1 !
+
+        Enemy Class properties : 
+
+        1. speed : Float ==> just a default speed for each movable enemy
+        2. anim : Animator ==> animator controller for each enemy
+        3. rb : rb ==>  for physics stuff, so the game object affected by physics
+        4. groundCheck : Transform ==> Transform for checking ground, it basically prevent game object to kept stay on their own platformers
+        5. wallCheck : Transform ==> Transform for wall checking, so you can flip the enemy if there's wall infront of it
+        
+        6. playerDetected : RaycastHit2D ==> This just a raycast for checking if the enemy able to see player
+        7. facingDirection (1) : int ==>  A value to check if the FacingDirection is right or left
+        8. Invicible(false) : bool ==> Basically to determine if the enemy able to DESTROYED or not, 
+        9. canMove(true) : bool ==> First state for making sure that the enemy able to move 
+        10. whatIsGround : LayerMask ==> Layer mask for checking the enemy placed in ground or not*groundCheck*
+        
+        11. whatToIgnore : LayerMask ==> Layer mask for ignoring a layer, this is used only for detecting player ;
+        12. wallCheckDistance(0.8f) : float ==> The distance for raycast to check 
+        13. groundCheckDistance(0.93f) : float ==>   The distance for raycast to check 
+        14. isWallDetected(false) : Bool ==> Just a general checking of a wall for flipping gameObject
+        15. isGround(false) : Bool ==>  JUst a boolean to check if the enemy currently in ground
+
+        16. animIdleTimer : float ==> Basically untuk cooldown suatu event; 
+        17. animIdleCooldown(2) : Float ==> Cooldown untuk *animIdleTimer*;
+
+        18.[SerializeField] protected int distanceToPlayer;
+        
+    *******************************************************************/
     [SerializeField] protected float speed = 3;
     protected Animator anim;
     protected Rigidbody2D rb;
@@ -52,12 +88,30 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     private void Update() {
+        /*******
+
+            IN Here, there's only for the child implementation
+            SO ENJOY IT
+
+        *******/
     }
 
     protected virtual void CollisionCheck()
     {
+
+    /******************************************************************
+        Basically this only for collision check that ARE GENERAL 
+        For each enemy
+
+        It just checking the transform of *groundCheck* and *wallCheck*
+        and if exists then, do raycast ( Shoot a bean),if the beam hit the ground/wall
+        then it should be TRUE for both value!
+
+        playerDetected is a different one, It is ignore the defined LayerMask
+    *******************************************************************/
+
+
         if(groundCheck != null) 
         {
 
@@ -68,25 +122,32 @@ public class Enemy : MonoBehaviour
             isWallDetected = Physics2D.Raycast(wallCheck.transform.position, Vector2.right * facingDirection, wallCheckDistance, whatisGround);
         }
         playerDetected = Physics2D.Raycast(wallCheck.transform.position, Vector2.right * facingDirection, distanceToPlayer, ~whatToIgnore);
+    
+    /******************************************************************
+    
+    *******************************************************************/
 
     }
     protected virtual void WalkAround() 
     {
-            if (animIdleTimer <= 0 && canMove)
-            {
-                rb.velocity = new Vector2(speed * facingDirection, rb.velocity.y);
-            }
-            else
-            {
-                rb.velocity = Vector2.zero;
-            }
+    /******************************************************************
+        //TODO
+    *******************************************************************/
+        if (animIdleTimer <= 0 && canMove)
+        {
+            rb.velocity = new Vector2(speed * facingDirection, rb.velocity.y);
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
+        }
 
-            if (isWallDetected || !isGround)
-            {
-                Flip();
-                animIdleTimer = animIdleCooldown;
-            }
-            animIdleTimer -= Time.deltaTime;
+        if (isWallDetected || !isGround)
+        {
+            Flip();
+            animIdleTimer = animIdleCooldown;
+        }
+        animIdleTimer -= Time.deltaTime;
     }
     public virtual void Damage() 
     {
