@@ -52,6 +52,9 @@ public class Enemy : MonoBehaviour
     protected bool invicible = false;
 
     protected bool canMove = true;
+
+    // Not included in DOCS yet!
+    [SerializeField]protected float timeDownToDestroy = 1.5f;
     
     
     /******************************************************************
