@@ -63,7 +63,6 @@ public class Enemy_Bee : Enemy
                     idlePointIndx =0;
                 }  
             }
-            
         }
         else 
         {
