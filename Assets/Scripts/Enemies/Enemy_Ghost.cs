@@ -5,20 +5,36 @@ using UnityEngine;
 public class Enemy_Ghost : Enemy
 {
      
+    /******************************************************************
+        Properties Start
+
+        ghostActiveTimer(4) : Float ==> Ghost able to be seen by player
+        ghostActiveCooldown : Float ==> How long the ghost able seen by the player 
+        isAggressive : bool ==> Ghost is Aggressive it mean that it will go to player current position
+        sr : SpriteRendered ==> This access for making the ghost not visible in the game
+        player : Transform ==> Making sure that ghost know the player position
+
+    *******************************************************************/
+
     private float ghostActiveTimer = 4;
     [SerializeField] private float ghostActiveCooldown;
 
     private bool isAggresive = true;
     private SpriteRenderer sr;
     private Transform player;
-    // Start is called before the first frame update
+    
+    
+    /******************************************************************
+        Properties End
+    *******************************************************************/
+    
+    
     protected override void Start()
     {
         base.Start();
         facingDirection = facingDirection * -1;
         player = GameObject.Find("Player").transform;   
         sr = GetComponent<SpriteRenderer>();
-        Debug.Log(player.transform.position);
 
     }
 
@@ -32,9 +48,9 @@ public class Enemy_Ghost : Enemy
         sr.enabled = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
+
 
         ghostActiveTimer -= Time.deltaTime;
         animIdleTimer -= Time.deltaTime;       

@@ -6,6 +6,24 @@ public class Enemy_Radish : Enemy
 {
 
     /******************************************************************
+        PROPERTIES START
+    
+    
+        groundAboveCheck : bool ==>
+        groundBelowCheck : RaycastHit2D ==>
+        verticalDirection(1) : Int ==> To told the Radish go up or down
+
+        groundAboveCheckDistance : Float ==> A Distance to check The above Ceilling  
+        groundBelowCheckDistance : Float ==> A Distance to check the ground    
+        flyForce : float ==> Basically for making the fly slower or not ( int y Axis)
+               
+        isAggressive(False) : bool ==> Only Aggressive when radish not flying
+        aggressiveTimer : Float ==> Timer toControl the flying state for radish
+        aggressiveTimeCooldown  : Float ==> it is the cooldown for radish to flying again
+        // private float constantRaycastBelowCheck = 1.25f;
+    *******************************************************************/
+
+    /******************************************************************
         Radish Flying information Start
     *******************************************************************/
     private bool groundAboveCheck;
@@ -33,6 +51,11 @@ public class Enemy_Radish : Enemy
         Radish Aggressive information End
     *******************************************************************/
 
+    /******************************************************************
+        PROPERTIES END
+    *******************************************************************/
+
+
     protected override void Start()
     {
         facingDirection = facingDirection * -1;
@@ -42,7 +65,15 @@ public class Enemy_Radish : Enemy
     // Update is called once per frame
     void Update()
     {
+
+    /******************************************************************
+        This Update for managing the radish behaviour
+    *******************************************************************/
         aggresiveTimer -= Time.deltaTime;
+
+
+
+        
         if(aggresiveTimer < 0 && !groundAboveCheck) 
         {
             // In state chillin
@@ -87,6 +118,11 @@ public class Enemy_Radish : Enemy
 
     public override void Damage() 
     {
+        /******************************************************************
+        when he's flying and got hit by player then he will become aggresive, we will make 
+        he's down faster and give some cooldown before he can fly again
+
+        ******************************************************************/
         if(!isAggressive) 
         {
             // Make sure push down faster
@@ -101,6 +137,11 @@ public class Enemy_Radish : Enemy
     protected override void CollisionCheck()
     {
         base.CollisionCheck();
+        
+        /******************************************************************
+        This collision down here is use for the Celling detection and the Ground detection
+        *groundBelowCheck* is TOTALLY DIFFERENT, this one is just check if the raycast Touching the ground layer or not
+        ******************************************************************/
         groundAboveCheck = Physics2D.Raycast(transform.position, Vector2.up,  groundAboveCheckDistance, whatisGround);
         groundBelowCheck = Physics2D.Raycast(transform.position, Vector2.down, groundBelowCheckDistance, whatisGround);
     }
