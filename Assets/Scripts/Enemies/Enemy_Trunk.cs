@@ -15,6 +15,10 @@ public class Enemy_Trunk : Enemy
     [SerializeField] private float wallBehindDistance;
     [SerializeField] private float wallBehindDetectedCooldown =2;
                      private float wallBehindDetectedTimer = 0;
+
+
+    [SerializeField] private float frontRadius;
+    [SerializeField] private Transform frontPosition;
     private bool isFrontDetected = false;
 
     [SerializeField] Transform BackPosition;
@@ -43,6 +47,7 @@ public class Enemy_Trunk : Enemy
         base.CollisionCheck();
         isBackDetected = Physics2D.OverlapCircle(BackPosition.position, backRadius, whatIsPlayer);
         isWallBehindDetected = Physics2D.Raycast(wallBehindCheck.position,Vector2.left * facingDirection, wallBehindDistance, whatisGround);
+        isFrontDetected = Physics2D.OverlapCircle(frontPosition.position, frontRadius, whatIsPlayer);
         Debug.Log("Wall Behind + " + isWallBehindDetected);
 
     }
@@ -89,7 +94,8 @@ public class Enemy_Trunk : Enemy
 
         }
         else {
-            
+
+            if(isFrontDetected) MoveBackwards(true);            
             if(backDetectedTimer > 0 && isBackDetected )
             {
                 MoveBackwards(false);
@@ -121,7 +127,9 @@ public class Enemy_Trunk : Enemy
     {
         base.OnDrawGizmos();
         Gizmos.DrawWireSphere(BackPosition.position, backRadius);
+        Gizmos.DrawWireSphere(frontPosition.position, frontRadius);
         Gizmos.DrawLine(wallBehindCheck.position, new Vector2(wallBehindCheck.position.x + wallBehindDistance, wallBehindCheck.position.y));
+
     }
 
     public void AttackEvent() 
