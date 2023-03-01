@@ -60,7 +60,6 @@ public class Enemy_Rhino : Enemy
                 WalkAround();
             }
 
-
         }
     }
 

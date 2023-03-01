@@ -134,7 +134,10 @@ public class Enemy : MonoBehaviour
     protected virtual void WalkAround() 
     {
     /******************************************************************
-        //TODO
+        Basic walking /run for the game object
+        In here the only limitations are
+            If the walldetected or ground is notDetected
+
     *******************************************************************/
         if (animIdleTimer <= 0 && canMove)
         {
@@ -154,6 +157,7 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Damage() 
     {
+
         if(!invicible) 
         {
             canMove = false;
@@ -161,7 +165,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void DestroyGameObject() 
+    public virtual void DestroyGameObject() 
     {
         Destroy(gameObject);
     }
