@@ -8,8 +8,8 @@ public class Enemy_Angrypig : Enemy
     /******************************************************************
     // State for aggressive pig START
     *******************************************************************/
-    private float pigAgressiveTimer;
-    [SerializeField] private float pigAgressiveCooldown = 3;
+    [SerializeField]private float pigAgressiveTimer;
+    [SerializeField] private float pigAgressiveCooldown = 10;
     [SerializeField] private float pigTimerToAgressive = 8;
     [SerializeField] private bool isAgressive = false;
 
@@ -26,7 +26,6 @@ public class Enemy_Angrypig : Enemy
     /******************************************************************
     // State  for Damage Pig end
     *******************************************************************/
-    
     
     /******************************************************************
     // Start is called before the first frame update
@@ -46,6 +45,7 @@ public class Enemy_Angrypig : Enemy
         WalkAround();
         AnimationControllers();
         aggresiveController();
+
     }
 
     private void aggresiveController() 
@@ -54,7 +54,7 @@ public class Enemy_Angrypig : Enemy
         {
             isAgressive = true;
             invicible = false;
-            pigAgressiveTimer = pigAgressiveCooldown;
+            pigAgressiveTimer = pigAgressiveCooldown;;
         }
 
         if(pigAgressiveTimer > 0 && isAgressive) 
@@ -64,37 +64,42 @@ public class Enemy_Angrypig : Enemy
             {
                 rb.velocity = new Vector2(speed * speedAgressiveMultiplier, rb.velocity.y);
             }
-            else 
+            else if(isWallDetected) 
             {
                 rb.velocity = Vector2.zero;
-                anim.SetBool("isAgressive", false);
+                isAgressive = false;
+                
+                anim.SetBool("isAgressive", isAgressive);
+                
+                invicible = true;
+                pigTimerToAgressive = 8;
             }
         }
-        else if(isAgressive && pigAgressiveTimer < 0)
-        {
-            isAgressive = false;
-            invicible = true;
-            pigTimerToAgressive = 8;
-        }
+    
     }
 
     public override void Damage () 
     {
+        canMove = false;
+        rb.velocity =  Vector2.zero;
         if(hitCounter > 0 && isAgressive && !invicible) 
         {
-            canMove = false;
+            anim.SetTrigger("hittedByPlayerOnce");
+            isAgressive = false;
             hitCounter --;
         }
 
         if(hitCounter == 0) 
         {
+            canMove = false;
             anim.SetTrigger("hittedByPlayer");
         }
+        canMove = true;
     }
 
     public override void DestroyGameObject()
     {
-            Destroy(gameObject);
+        Destroy(gameObject);
     }
     private void AnimationControllers() 
     {
