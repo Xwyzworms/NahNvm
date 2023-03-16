@@ -37,6 +37,7 @@ public class Enemy_BlueBird : Enemy
             Flip();
         }
     }
+ 
     public override void Damage()
     {
         base.Damage();
