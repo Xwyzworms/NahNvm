@@ -4,26 +4,27 @@ using UnityEngine;
 using Cinemachine;
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private GameObject myCamera;
-    [SerializeField] private Color gizmosColor;
+    [SerializeField] private GameObject camera;
     [SerializeField] private PolygonCollider2D cd;
-    private void OnStart() 
+    [SerializeField] private Color gizmosColor;
+    private void Start() 
     {
-        myCamera.GetComponent<CinemachineVirtualCamera>().Follow = GameObject.Find("Player").transform;
+        camera.GetComponent<CinemachineVirtualCamera>().Follow = PlayerManager.instance.currentPlayer.transform;
     }
-    private void OnTriggerEnter2D(Collider2D collider) 
+
+    private void OnTriggerEnter2D(Collider2D collision) 
     {
-        if(collider.GetComponent<Player>() != null) 
+        if(collision.GetComponent<Player>() != null) 
         {
-            myCamera.SetActive(true);
+            camera.SetActive(true);
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collider) 
+    private void OnTriggerExit2D(Collider2D collision) 
     {
-        if(collider.GetComponent<Player>() != null) 
+        if(collision.GetComponent<Player>() != null) 
         {
-            myCamera.SetActive(false);
+            camera.SetActive(false);
         }
     }
 
@@ -32,4 +33,5 @@ public class CameraManager : MonoBehaviour
         Gizmos.color = gizmosColor;
         Gizmos.DrawWireCube(cd.bounds.center, cd.bounds.size);
     }
+
 }

@@ -24,7 +24,6 @@ public class Enemy_Bee : Enemy
     [SerializeField] float bulletSpeed;
 
     private bool isPlayerDetected = false;
-    private Transform player;
     private float defaultSpeed;
 
     private bool isAggresive = false;
@@ -33,16 +32,18 @@ public class Enemy_Bee : Enemy
     {
         base.Start();
         facingDirection = facingDirection * -1;
-        player = GameObject.Find("Player").transform;
     }
 
     void Update()
     {
+        if(player == null) 
+        {
+            return;
+        }
         animIdleTimer -= Time.deltaTime;
         anim.SetBool("idle", animIdleTimer > 0);
         if(animIdleTimer > 0) 
         {
-
             return ;
         }        
 

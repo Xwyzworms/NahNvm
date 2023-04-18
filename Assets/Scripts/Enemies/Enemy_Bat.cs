@@ -36,7 +36,6 @@ public class Enemy_Bat : Enemy
     private bool canAggressive = true;
     private bool isPlayerDetected = false;
 
-    private Transform player;
     [SerializeField] private float checkRadius;
     [SerializeField] private LayerMask whatIsPlayer;
 
@@ -52,7 +51,6 @@ public class Enemy_Bat : Enemy
         
         base.Start();
         speed = defaultSpeed;
-        player = GameObject.Find("Player").transform;
         destination = idlePoints[0].position;
         this.transform.position = idlePoints[0].position;
     }
@@ -60,6 +58,7 @@ public class Enemy_Bat : Enemy
     // Update is called once per frame
     void Update()
     {
+        if(player == null)  return;
         AnimationControllers();   
         animIdleTimer -= Time.deltaTime;
         if(animIdleTimer > 0) 
@@ -76,7 +75,13 @@ public class Enemy_Bat : Enemy
         {
             isAggressive = true;
             canAggressive = false;
-            destination = player.transform.position;
+            if(player != null)
+                destination = player.transform.position;
+            else 
+            {
+                isAggressive = false;
+                canAggressive = true;
+            }
         }
 
     /******************************************************************

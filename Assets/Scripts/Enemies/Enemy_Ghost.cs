@@ -21,7 +21,7 @@ public class Enemy_Ghost : Enemy
 
     private bool isAggresive = true;
     private SpriteRenderer sr;
-    private Transform player;
+    
     
     
     /******************************************************************
@@ -33,7 +33,6 @@ public class Enemy_Ghost : Enemy
     {
         base.Start();
         facingDirection = facingDirection * -1;
-        player = GameObject.Find("Player").transform;   
         sr = GetComponent<SpriteRenderer>();
 
     }
@@ -51,6 +50,10 @@ public class Enemy_Ghost : Enemy
     void Update()
     {
 
+        if(player == null) 
+        {
+            return;
+        }
 
         ghostActiveTimer -= Time.deltaTime;
         animIdleTimer -= Time.deltaTime;       

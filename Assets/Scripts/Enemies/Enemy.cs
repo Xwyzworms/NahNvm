@@ -47,6 +47,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected Transform wallCheck;
     protected RaycastHit2D playerDetected;
+    protected Transform player;
 
     protected int facingDirection = 1;
     protected bool invicible = false;
@@ -80,6 +81,8 @@ public class Enemy : MonoBehaviour
     {
         anim = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody2D>();
+        
+        player= PlayerManager.instance.currentPlayer.transform;
 
         if(groundCheck == null)
         {

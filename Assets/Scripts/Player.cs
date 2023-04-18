@@ -199,6 +199,7 @@ public class Player : MonoBehaviour
             return;
         }
         #region Define horizontal directionn for knockback
+        GetComponent<CameraShakeFX>().screenShake(facingDirection);
         int hDirection = 0;
         isKnocked = true;
         canBeKnocked = false;
